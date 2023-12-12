@@ -1,0 +1,49 @@
+const notesContainer = document.querySelector('.notes-container');
+const createBtn = document.querySelector('.btn');
+const notes = document.querySelectorAll('.input-box');
+
+function updateStorage(){
+    localStorage.setItem('notes',  notesContainer.innerHTML);
+}
+
+function showNotes(){
+    notesContainer.innerHTML = localStorage.getItem('notes');
+}
+showNotes()
+
+function createNotes(){
+    let inputBox = document.createElement('p');
+    let img = document.createElement('img');
+    inputBox.className = 'input-box';
+    inputBox.setAttribute('contenteditable', 'true');
+    img.src = "images/delete.png";
+    notesContainer.appendChild(inputBox).appendChild(img);
+    // updateStorage();
+}
+
+function deleteButtonClick(e){
+if (e.target.tagName === 'IMG'){
+    e.target.parentElement.remove();
+    updateStorage()
+}
+else if(e.target.tagName === 'P'){
+ let  notes = document.querySelectorAll('input-box');
+    notes.forEach(nt => {
+        nt.onkeyup = function(){
+            updateStorage();
+        }  
+    })
+}
+}
+
+document.addEventListener('keydown', event =>{
+    if(event.key === 'enter'){
+        document.execCommand('insertLineBreak');
+        event.preventDefault();
+    }
+})
+
+notesContainer.addEventListener('click', deleteButtonClick)
+createBtn.addEventListener('click', createNotes);
+
+
